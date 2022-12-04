@@ -1,4 +1,4 @@
-export const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
+const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
     const app = express();
 
     app.use((req, res, next) => {
@@ -6,6 +6,10 @@ export const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
         res.set(
             'Access-Control-Allow-Methods',
             'GET,POST,PUT,PATCH,OPTIONS,DELETE'
+        );
+        res.set(
+            'Access-Control-Allow-Headers',
+            'Content-Type, Accept, Access-Control-Allow-Headers'
         );
         next();
     });
@@ -44,3 +48,5 @@ export const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
 
     return app;
 };
+
+export default appSrc
