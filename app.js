@@ -22,7 +22,7 @@ const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
     app.use(bodyParser.urlencoded({ extended: true }));
 
     app.get('/login/', (_, res) => {
-        res.send('itmo335225');
+        res.send('itmo338102');
     });
     app.get('/code/', (req, res) => {
         createReadStream(import.meta.url.substring(7)).pipe(res);
@@ -50,7 +50,7 @@ const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
         mongoose.connect(URL).then(() => {
             const user = new model({ login, password });
 
-            user.save().then(res => res.setndStatus(201));
+            user.save().then(_ => res.setndStatus(201));
         });
     });
     app.all(/./, (_, res) => {
