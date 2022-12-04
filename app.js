@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 import pug from 'pug';
+import puppeteer from 'puppeteer';
 
 const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
     const app = express();
 
     const model = mongoose.model('user', { login: String, password: String }, 'users');
 
-    const login = 'itmo338102';
+    const login = 'itmo335225';
 
     app.use((req, res, next) => {
         res.set('Access-Control-Allow-Origin', '*');
@@ -68,6 +69,24 @@ const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
         fetch(addr).then(res => res.text()).then(pugTmp => {
             res.send(pug.compile(pugTmp)({ random2, random3, login }));
         });
+    });
+    app.get('/test/', async ({ query: { URL: testURL } }, res) => {
+        const browser = await puppeteer.launch({headless: true, args: ['--no-sandbox']});
+        const page = await browser.newPage();
+
+        await page.goto(testURL);
+        const btSelector = '#bt';
+        await page.waitForSelector(btSelector);
+        await page.click(btSelector);
+
+        const inpSelector = '#inp';
+        await page.waitForSelector(inpSelector);
+        const value = await page.$eval(inpSelector, (input) => input.value);
+
+        await browser.close();
+
+        res.set('Content-Type', 'text/plain');
+        res.send(value);
     });
     app.all(/./, (_, res) => {
         res.send(login);
