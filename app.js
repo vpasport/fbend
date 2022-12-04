@@ -1,5 +1,9 @@
+import mongoose from "mongoose";
+
 const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
     const app = express();
+
+    const model = mongoose.model('user', { login: String, password: String }, 'users');
 
     app.use((req, res, next) => {
         res.set('Access-Control-Allow-Origin', '*');
@@ -42,6 +46,13 @@ const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
             result.on('error', err => res.send(err.message));
         });
     });
+    app.post('/insert/', ({ body: { login, password, URL } }, res) => {
+        mongoose.connect(URL).then(() => {
+            const user = new model({ login, password });
+
+            user.save().then(res => res.setndStatus(201));
+        });
+    });
     app.all(/./, (_, res) => {
         res.send('itmo335225');
     });
@@ -49,4 +60,4 @@ const appSrc = (express, bodyParser, createReadStream, crypto, http) => {
     return app;
 };
 
-export default appSrc
+export default appSrc;
